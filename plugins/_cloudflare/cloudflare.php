@@ -55,7 +55,12 @@ class rCloudflare
 			$code = escapeshellarg(Utility::getExternal('python'))." -c ".
 				escapeshellarg("import cloudscraper\nimport json\ntokens, user_agent = cloudscraper.get_tokens({$url}{$proxies}{$recaptcha})\nprint(json.dumps([tokens,user_agent]))");
 			$data = `{$code}`;
-if($data && ($data = json_decode($data,true)) && is_array($data) && count($data) > 1 && !empty($data[0])) {
+			if($data &&
+				($data = json_decode($data,true)) &&
+				is_array($data) &&
+				count($data) > 1 &&
+				!empty($data[0]))
+			{
 				$this->client->setcookies();
 				$this->client->cookies = array_merge($this->client->cookies,$data[0]);
 				$this->client->agent = $data[1];
